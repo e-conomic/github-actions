@@ -37,6 +37,7 @@ Build docker image and publish
     password: ${{ secrets.DEVECONOCM_GCR_RW }}
     tags: eu.gcr.io/dev-econo-cm/<project-name-and-version>
 ```
+#### User customizable options
 `tags` - replace **<project-name-and-version>** with you own value.
 ex.: `companies:${{ github.ref_name }}-${{ env.SHA7 }}`
   
@@ -46,6 +47,29 @@ ex.: `companies:${{ github.ref_name }}-${{ env.SHA7 }}`
   run: echo SHA7=${GITHUB_SHA::7} >> $GITHUB_ENV
 ```
 
+### polaris-sast
+Run polaris static application security testing. The action runs on the root folder of the cloned application repository.
+```yaml
+- name: Static application security testing
+  uses: ./_github-actions/polaris-sast
+  with:
+    api_url: ${{ secrets.POLARIS_API_URL }}
+    access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+```
+#### User customizable options
+None
+ 
+### upload-docs
+Upload documentation to docs.e-conomic.ws
+```yaml
+- name: Upload docs
+  uses: ./_github-actions/upload-docs
+  with:
+    docs_bucket_sa: ${{ secrets.DOCS_BUCKET_SA }}
+```
+#### User customizable options
+None
+  
 ## How to contribute
 If you want to add a new shareable action, please create a pull request containing:
 * Code updates (If you are creating a new action, place it in a new directory)
