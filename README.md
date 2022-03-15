@@ -6,7 +6,7 @@ Repository for shared GitHub Actions
 
 This repository contains reusable github action jobs that can be used in the GitHub action workflows in other repositories.
 
-:warning: When making changes to this repository, please keep in mind, that this is a public repo and you should keep the exposure of the internal infrastructure and resouirces to the minimum.
+:warning: When making changes to this repository, please keep in mind, that this is a public repo and you should keep the exposure of the internal infrastructure and resources to the minimum.
 
 ## How to use
 Reference required steps in your workflow `yml` files.
