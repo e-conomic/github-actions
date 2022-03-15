@@ -20,6 +20,9 @@ inputs:
     description: "Folder containing Dockerfile. Context parameter for docker/build-push-action action"
     required: true
     default: "."
+  target:
+    description: "Sets the target stage to build"
+    required: false
     
 runs:
   using: 'composite'
@@ -37,3 +40,4 @@ runs:
         context: ${{ inputs.context }}
         push: true
         tags: ${{ inputs.tags }}
+        target: ${{ inputs.target }}
