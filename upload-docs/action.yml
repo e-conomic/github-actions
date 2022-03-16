@@ -23,6 +23,7 @@ runs:
         mkdir -p _docs
         echo Searching for readme.md file and coping to temporary directory
         find -iname readme.md -exec cp {} ./_docs \;
+        echo Listing docs directory content
         ls -al ./_docs
         echo Removing existing docs for ${{ github.event.repository.name }}
         gsutil -m rm -r gs://prod-econo-cm_docs/${{ github.event.repository.name }} 2> /dev/null || true

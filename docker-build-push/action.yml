@@ -1,5 +1,5 @@
 name: Docker build and push
-description: Build and push docker image
+description: Build and push docker image to container registry
 
 inputs:
   registry:

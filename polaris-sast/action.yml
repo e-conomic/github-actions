@@ -19,7 +19,6 @@ runs:
         POLARIS_ACCESS_TOKEN: ${{ inputs.access_token }}
         GIT_BRANCH: ${{ github.ref_name }}
       run: |
-        echo Current directory: $(pwd)
         echo Downloading Polaris CLI
         wget -q ${{ inputs.api_url }}/api/tools/polaris_cli-linux64.zip
         echo Unzipping Polaris CLI
