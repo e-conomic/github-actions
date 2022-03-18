@@ -1,0 +1,41 @@
+name: Publish NPM package
+description: Publish NPM package to registry.npmjs.org
+
+inputs:
+  node-version:
+    description: "Node version"
+    required: true
+  npm-token:
+    description: "NPM registry authentication token"
+    required: true
+  package-version:
+    description: "Package version"
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set package version
+      shell: bash
+      run: |
+        echo Setting package version to:
+        echo ${{ inputs.package-version  }}
+        npm version ${{ inputs.package-version  }} --commit-hooks=false --git-tag-version=false
+        echo Using package version:
+        cat package.json | grep version
+          
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Run CI
+      shell: bash
+      run: npm ci
+
+    - name: Publish package
+      shell: bash
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
