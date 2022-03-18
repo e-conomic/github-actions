@@ -32,7 +32,9 @@ runs:
 
     - name: Run CI
       shell: bash
-      run: npm ci
+      run: |
+        npm ci
+        if [ -f .npmrc ]; then rm .npmrc; fi
 
     - name: Publish package
       shell: bash
