@@ -99,7 +99,8 @@ You will need to extract the version number from the release and then publish:
 If you want to add a new shareable action, please create a pull request containing:
 * Code updates (If you are creating a new action, place it in a new directory)
 * Update of the readme.md reflecting your changes if necessary
-  
+
+⚠️Important ⚠️
 Once the changes are merged into the `master` branch:
 * Create a release with the new version number. Assign the version number tag in the following format `vX.Y.Z`
 * If you are not changing the major version, you need to move the `vX` tag to the latest commit so that it contains both `vX.Y.Z` and `vX` tags.
