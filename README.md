@@ -4,7 +4,7 @@ id: github-actions
 # github-actions
 Repository for shared GitHub Actions
 
-This repository contains reusable github action jobs that can be used in the GitHub action workflows in other repositories.
+This repository contains reusable GitHub action jobs that can be used in the GitHub action workflows in other repositories.
 
 :warning: When making changes to this repository, please keep in mind, that this is a public repo and you should keep the exposure of the internal infrastructure and resources to the minimum.
 
@@ -100,4 +100,7 @@ If you want to add a new shareable action, please create a pull request containi
 * Code updates (If you are creating a new action, place it in a new directory)
 * Update of the readme.md reflecting your changes if necessary
   
-Once the changes are merged into the `master` branch, create a release with the new version number.
+Once the changes are merged into the `master` branch:
+* Create a release with the new version number. Assign the version number tag in the following format `vX.Y.Z`
+* If you are not changing the major version, you need to move the `vX` tag to the latest commit so that it contains both `vX.Y.Z` and `vX` tags.
+* If you are releasing a new major version, you need to release a semver `vX.0.0` version and also add an additional tag `vX` manually
