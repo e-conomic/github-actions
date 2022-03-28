@@ -1,17 +1,16 @@
 name: Docker build and push
-description: Build and push docker image to container registry
+description: Build and push docker image
 
 inputs:
   registry:
     description: "Registry name"
     required: true
     default: "eu.gcr.io"
-  username:
-    description: "Registry username"
+  workload_identity_pool_provider:
+    description: "ID of workload identity federation pool provider"
     required: true
-    default: "_json_key"
-  password:
-    description: "Registry password"
+  gcr_service_account_email:
+    description: "Google Service Account Email with GCR read and write permissions"
     required: true
   tags:
     description: "List of tags"
@@ -27,12 +26,19 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Login to google container repo
-      uses: docker/login-action@v1 
+      # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0'
       with:
-        registry: ${{ inputs.registry }}
-        username: ${{ inputs.username }}
-        password: ${{ inputs.password }}
+        workload_identity_provider: ${{ inputs.workload_identity_pool_provider }}
+        service_account: ${{ inputs.gcr_service_account_email }}
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      # This avoids using docker/login-action as a middle man.
+    - name: Configure Docker with GCloud credentials
+      shell: bash
+      run: gcloud auth configure-docker
 
     - name: Tag and publish
       uses: docker/build-push-action@v2

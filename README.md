@@ -24,14 +24,19 @@ The current documentation assumes that the latest version is `v6`
 The following examples assume that you have included a github-actions repo checkout in the previous step.
 
 ## docker-build-push
-Build docker image and publish
+Build docker image and publish to GCR using [Workload Identity Federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation#github-actions).
+This action needs [Workload Identity Federation Setup for Github Actions](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions) and 
+Service Account created with permission to Push container images to GCR.
+
+For `tags` you can also use https://github.com/marketplace/actions/docker-metadata-action
 
 ```yaml
 - name: Docker build and push
-  uses: e-conomic/github-actions/docker-build-push@v6
+  uses: e-conomic/github-actions/docker-build-push@v7
   with:
-    password: ${{ secrets.DEVECONOCM_GCR_RW }}
-    tags: eu.gcr.io/dev-econo-cm/<project-name-and-version>
+    tags: eu.gcr.io/dev-econo-cm/<service-name-and-version>
+    workload_identity_pool_provider: <workload-identity-pool-provider>
+    gcr_service_account_email: <google-service-account-email>
 ```
 ### User customizable options
 * `context` (optional, default value '.') - Folder containing Dockerfile. Context parameter for docker/build-push-action action
