@@ -27,8 +27,7 @@ runs:
   using: 'composite'
   steps:
       # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
+    - name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v0'
       with:
         workload_identity_provider: ${{ inputs.workload_identity_pool_provider }}
