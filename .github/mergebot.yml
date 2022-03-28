@@ -13,4 +13,5 @@ jobs:
       - uses: e-conomic/mergebot@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: ${{ secrets.PLATFORM_REVIEWERS }}
           semver_match: minor
