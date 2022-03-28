@@ -30,6 +30,17 @@ Service Account created with permission to Push container images to GCR.
 
 For `tags` you can also use https://github.com/marketplace/actions/docker-metadata-action
 
+### Pre-requisite:
+These job level permissions are required by workload identity federation as decribed here:
+https://github.com/google-github-actions/auth#authenticating-via-workload-identity-federation-1
+
+```
+permissions:
+  contents: 'read'
+  id-token: 'write'
+```
+
+### Step:
 ```yaml
 - name: Docker build and push
   uses: e-conomic/github-actions/docker-build-push@v7
