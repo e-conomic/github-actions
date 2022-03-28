@@ -1,4 +1,4 @@
-name: Dependabot auto merge
+name: Mergebot
 
 on:
   check_suite:
@@ -7,8 +7,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  dependabot-auto-merge:
+  auto_merge:
+    name: Auto merge
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     steps:
       - uses: e-conomic/mergebot@v1
         with:
