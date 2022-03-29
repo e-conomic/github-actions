@@ -1,0 +1,45 @@
+name: Configure Helm
+description: Install and authenticate Helm with Workload Identity Federation
+
+inputs:
+  workload_identity_pool_provider:
+    description: "ID of workload identity federation pool provider"
+    required: true
+  helm_service_account_email:
+    description: "Google Service Account Email with GCR read and write permissions"
+    required: true
+  cluster_name:
+    description: "Target cluster for Helm deployment"
+    required: true
+  location:
+    description: "Location of the cluster"
+    required: true
+    default: "europe-west4"
+  project_id:
+    description: "GCP project containing the cluster"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+
+    - id: "auth"
+      name: "Authenticate to Google Cloud"
+      uses: "google-github-actions/auth@v0"
+      with:
+        workload_identity_provider: ${{ inputs.workload_identity_pool_provider }}
+        service_account: ${{ inputs.helm_service_account_email }}
+
+    - name: Get GKE Credentials for Staging Cluster
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: ${{ inputs.cluster_name }}
+        location: ${{ inputs.location }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Add Helm gcs plugin
+      shell: bash
+      run: |
+        helm plugin install https://github.com/hayorov/helm-gcs

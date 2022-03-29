@@ -13,13 +13,15 @@ Reference required steps in your workflow `yml` files.
 
 Check the latest version in the [releases](https://github.com/e-conomic/github-actions/releases) and suffix the actions with it.
 
-The current documentation assumes that the latest version is `v6`
+The current documentation assumes that the latest version is `v7`
 
 # Actions
-* docker-build-push
-* polaris-sast
-* upload-docs
-* npm-publish
+* `docker-build-push`
+* `configure-docker`
+* `configure-helm`
+* `polaris-sast`
+* `upload-docs`
+* `npm-publish`
 
 The following examples assume that you have included a github-actions repo checkout in the previous step.
 
@@ -31,7 +33,7 @@ Service Account created with permission to Push container images to GCR.
 For `tags` you can also use https://github.com/marketplace/actions/docker-metadata-action
 
 ### Pre-requisite:
-These job level permissions are required by workload identity federation as decribed here:
+These job level permissions are required by workload identity federation as described here:
 https://github.com/google-github-actions/auth#authenticating-via-workload-identity-federation-1
 
 ```
@@ -59,11 +61,71 @@ By default, GitHub does not provide a short SHA of the commit. There are multipl
   run: echo SHA7=${GITHUB_SHA::7} >> $GITHUB_ENV
 ```
 
+## configure-docker
+Configure and authenticate Docker using [Workload Identity Federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation#github-actions).
+This action needs [Workload Identity Federation Setup for Github Actions](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions) and 
+Service Account created with permission to Push container images to GCR.
+
+### Pre-requisite:
+These job level permissions are required by workload identity federation as described here:
+https://github.com/google-github-actions/auth#authenticating-via-workload-identity-federation-1
+
+```
+permissions:
+  contents: 'read'
+  id-token: 'write'
+```
+
+### Step:
+```yaml
+- name: Configure and authenticate Docker
+  uses: e-conomic/github-actions/configure-docker@v7
+  with:
+    workload_identity_pool_provider: <workload-identity-pool-provider>
+    gcr_service_account_email: <google-service-account-email>
+```
+### User customizable options
+* `registry` (optional, default value `eu.gcr.io`) - Which Google Container Registry to use.
+  
+> Note: This step only configures Docker, building, tagging and publishing is a
+> separate step that needs to be done after this one.
+
+## configure-helm
+Install, configure and authenticate Helm using [Workload Identity Federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation#github-actions).
+This action needs [Workload Identity Federation Setup for Github Actions](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions) and 
+Service Account created with permission to Push container images to GCR.
+
+### Pre-requisite:
+These job level permissions are required by workload identity federation as described here:
+https://github.com/google-github-actions/auth#authenticating-via-workload-identity-federation-1
+
+```
+permissions:
+  contents: 'read'
+  id-token: 'write'
+```
+
+### Step:
+```yaml
+- name: Configure and authenticate Helm
+  uses: e-conomic/github-actions/configure-helm@v7
+  with:
+    workload_identity_pool_provider: <workload-identity-pool-provider>
+    helm_service_account_email: <google-service-account-email>
+    project_id: <GCP project name>
+    cluster_name: <k8s cluster name in the specified GCP project>
+```
+### User customizable options
+* `location` (optional, default value `europe-west4`) - Cluster location.
+  
+> Note: This step only configures Helm. Building and deployment should be done
+> as a separate step afterwards.
+
 ## polaris-sast
 Run Polaris static application security testing. The action runs on the root folder of the cloned application repository.
 ```yaml
 - name: Static application security testing
-  uses: e-conomic/github-actions/polaris-sast@v6
+  uses: e-conomic/github-actions/polaris-sast@v7
   with:
     api_url: ${{ secrets.POLARIS_API_URL }}
     access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
@@ -75,7 +137,7 @@ _None_
 Upload documentation to docs.e-conomic.ws
 ```yaml
 - name: Upload docs
-  uses: e-conomic/github-actions/upload-docs@v6
+  uses: e-conomic/github-actions/upload-docs@v7
   with:
     docs_bucket_sa: ${{ secrets.DOCS_BUCKET_SA }}
 ```
@@ -102,7 +164,7 @@ You will need to extract the version number from the release and then publish:
   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
   
 - name: Publish NPM package
-  uses: e-conomic/github-actions/npm-publish@v6
+  uses: e-conomic/github-actions/npm-publish@v7
   with:
     node-version: '16'
     package-version: ${{ steps.package_version.outputs.VERSION  }}

@@ -1,0 +1,35 @@
+name: Configure Docker
+description: Authenticate Docker with Workload Identity Federation
+
+inputs:
+  registry:
+    description: "Registry name"
+    required: true
+    default: "eu.gcr.io"
+  workload_identity_pool_provider:
+    description: "ID of workload identity federation pool provider"
+    required: true
+  gcr_service_account_email:
+    description: "Google Service Account Email with GCR read and write permissions"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
+    - name: "Authenticate to Google Cloud"
+      uses: "google-github-actions/auth@v0"
+      with:
+        workload_identity_provider: ${{ inputs.workload_identity_pool_provider }}
+        service_account: ${{ inputs.gcr_service_account_email }}
+
+    # Configure docker to use the gcloud command-line tool as a credential helper
+    # This avoids using docker/login-action as a middle man.
+    - name: Configure Docker with GCloud credentials
+      shell: bash
+      run: gcloud auth configure-docker ${{ inputs.registry }}
