@@ -43,3 +43,8 @@ runs:
       shell: bash
       run: |
         helm plugin install https://github.com/hayorov/helm-gcs
+
+    - name: Add dependency chart repos
+      shell: bash
+      run: |
+        helm repo add e-conomic-charts gs://${{ secrets.HELM_GCS_BUCKET_NAME }} --force-update
