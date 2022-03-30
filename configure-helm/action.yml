@@ -18,6 +18,9 @@ inputs:
   project_id:
     description: "GCP project containing the cluster"
     required: true
+  helm_gcs_bucket_name:
+    description: "Helm bucket name with charts"
+    required: true
 
 runs:
   using: "composite"
@@ -47,4 +50,4 @@ runs:
     - name: Add dependency chart repos
       shell: bash
       run: |
-        helm repo add e-conomic-charts gs://${{ secrets.HELM_GCS_BUCKET_NAME }} --force-update
+        helm repo add e-conomic-charts gs://${{ inputs.helm_gcs_bucket_name }} --force-update

@@ -112,6 +112,7 @@ permissions:
   with:
     workload_identity_pool_provider: <workload-identity-pool-provider>
     helm_service_account_email: <google-service-account-email>
+    helm_gcs_bucket_name: <GCS bucket name>
     project_id: <GCP project name>
     cluster_name: <k8s cluster name in the specified GCP project>
 ```
