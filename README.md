@@ -109,6 +109,8 @@ permissions:
 ```yaml
 - name: Configure and authenticate Helm
   uses: e-conomic/github-actions/configure-helm@v7
+  # Needed since installing twice yields error
+  continue-on-error: true
   with:
     workload_identity_pool_provider: <workload-identity-pool-provider>
     helm_service_account_email: <google-service-account-email>
