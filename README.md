@@ -183,5 +183,5 @@ If you want to add a new shareable action, please create a pull request containi
 
 ⚠️Important ⚠️
 Once the changes are merged into the `master` branch:
-* If you are releasing a new major version, you need to release a `vX` version
-* If you are releasing a non-major version, you need to update the `vX` version (move the tag to latest commit) and release the `vX.Y` version as well
+* If you have breaking changes, you need to release a new `vX` version
+* If you do not have breaking changes, you need to update the latest `vX` version (move the tag to latest commit) and release the `vX.Y` minor version as well
