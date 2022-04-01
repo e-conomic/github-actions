@@ -1,7 +1,9 @@
 name: Mergebot
 
 on:
-  check_suite:
+  workflow_run:
+    workflows:
+      - Pull request
     types:
       - completed
   workflow_dispatch:
