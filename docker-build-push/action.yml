@@ -22,13 +22,13 @@ inputs:
   target:
     description: "Sets the target stage to build"
     required: false
-    
+
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-      # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
-    - name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v0'
+    # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
+    - name: "Authenticate to Google Cloud"
+      uses: "google-github-actions/auth@v0"
       with:
         workload_identity_provider: ${{ inputs.workload_identity_pool_provider }}
         service_account: ${{ inputs.gcr_service_account_email }}

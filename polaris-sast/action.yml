@@ -8,9 +8,9 @@ inputs:
   access_token:
     description: "Polaris access token"
     required: true
-    
+
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - shell: bash
       env:

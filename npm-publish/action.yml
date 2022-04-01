@@ -13,7 +13,7 @@ inputs:
     required: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Set package version
       shell: bash
@@ -23,12 +23,12 @@ runs:
         npm version ${{ inputs.package-version  }} --commit-hooks=false --git-tag-version=false
         echo Using package version:
         cat package.json | grep version
-          
+
     - name: Setup node
       uses: actions/setup-node@v3
       with:
         node-version: ${{ inputs.node-version }}
-        registry-url: 'https://registry.npmjs.org'
+        registry-url: "https://registry.npmjs.org"
 
     - name: Run CI
       shell: bash

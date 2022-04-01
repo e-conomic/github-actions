@@ -5,17 +5,17 @@ inputs:
   docs_bucket_sa:
     description: "Documentation bucket service account"
     required: true
-    
+
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Setup gcloud credentials
       uses: google-github-actions/setup-gcloud@v0.2.1
       with:
-          project_id: prod-econo-cm
-          service_account_key: ${{ inputs.docs_bucket_sa }}
-          export_default_credentials: true  
-    
+        project_id: prod-econo-cm
+        service_account_key: ${{ inputs.docs_bucket_sa }}
+        export_default_credentials: true
+
     - name: Upload docs
       shell: bash
       run: |
@@ -31,4 +31,3 @@ runs:
         gsutil -m cp -r _docs gs://prod-econo-cm_docs/${{ github.event.repository.name }}
         echo Removing temporary docs directory
         rm -rf _docs
-        

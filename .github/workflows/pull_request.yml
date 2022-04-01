@@ -3,20 +3,20 @@ name: Tests
 on:
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Yaml Lint
-      run: |
-        yamllint --version
-        echo "Linting YAML sources with yamllint ..."
-        
-        yamllint -d relaxed --format standard --no-warnings .
-        
-        echo "OK"
+      - uses: actions/checkout@v2
+
+      - name: Yaml Lint
+        run: |
+          yamllint --version
+          echo "Linting YAML sources with yamllint ..."
+
+          yamllint -d relaxed --format standard --no-warnings .
+
+          echo "OK"
