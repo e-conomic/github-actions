@@ -5,6 +5,9 @@ inputs:
   docs_bucket_sa:
     description: "Documentation bucket service account"
     required: true
+  docs_directory_name:
+    description: "Directory name where docs are located. If ommited, README.md from the root folder will be uploaded to docs"
+    required: false
 
 runs:
   using: "composite"
@@ -18,16 +21,28 @@ runs:
 
     - name: Upload docs
       shell: bash
+      env:
+        docs_directory_name: ${{ inputs.docs_bucket_sa }}
       run: |
-        echo Creating a temporary directory for docs content
-        mkdir -p _docs
-        echo Searching for readme.md file and coping to temporary directory
-        find -iname readme.md -exec cp {} ./_docs \;
-        echo Listing docs directory content
-        ls -al ./_docs
-        echo Removing existing docs for ${{ github.event.repository.name }}
+        if [ -z "$docs_directory_name" ]
+        then
+          upload_dir=./_docs
+
+          echo "Creating a temporary directory for docs content: $docs_directory_name"
+          mkdir -p _docs
+
+          echo "Searching for readme.md file and coping to temporary directory"
+          find -maxdepth 1 -iname readme.md -exec cp {} ./_docs \;
+        else
+          echo "Using requested docs directory: $docs_directory_name"
+          upload_dir=$docs_directory_name
+        fi
+
+        echo "Listing docs directory content"
+        ls -al $upload_dir
+
+        echo "Removing existing docs for ${{ github.event.repository.name }}"
         gsutil -m rm -r gs://prod-econo-cm_docs/${{ github.event.repository.name }} 2> /dev/null || true
-        echo Uploading docs to Google Cloud Storage for ${{ github.event.repository.name }}
-        gsutil -m cp -r _docs gs://prod-econo-cm_docs/${{ github.event.repository.name }}
-        echo Removing temporary docs directory
-        rm -rf _docs
+
+        echo "Uploading docs to Google Cloud Storage for ${{ github.event.repository.name }}"
+        gsutil -m cp -r $upload_dir gs://prod-econo-cm_docs/${{ github.event.repository.name }}
