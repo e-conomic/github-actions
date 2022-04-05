@@ -22,20 +22,20 @@ runs:
     - name: Upload docs
       shell: bash
       env:
-        docs_directory_name: ${{ inputs.docs_bucket_sa }}
+        DOCS_DIR: ${{ inputs.docs_directory_name }}
       run: |
-        if [ -z "$docs_directory_name" ]
+        if [ -z "$DOCS_DIR" ]
         then
           upload_dir=./_docs
 
-          echo "Creating a temporary directory for docs content: $docs_directory_name"
+          echo "Creating a temporary directory for docs content: $DOCS_DIR"
           mkdir -p _docs
 
           echo "Searching for readme.md file and coping to temporary directory"
           find -maxdepth 1 -iname readme.md -exec cp {} ./_docs \;
         else
-          echo "Using requested docs directory: $docs_directory_name"
-          upload_dir=$docs_directory_name
+          echo "Using requested docs directory: $DOCS_DIR"
+          upload_dir=$DOCS_DIR
         fi
 
         echo "Listing docs directory content"
