@@ -8,3 +8,23 @@ updates:
     directory: /configure-docker/
     schedule:
       interval: daily
+  - package-ecosystem: github-actions
+    directory: /configure-helm/
+    schedule:
+      interval: daily
+  - package-ecosystem: github-actions
+    directory: /docker-build-push/
+    schedule:
+      interval: daily
+  - package-ecosystem: github-actions
+    directory: /npm-publish/
+    schedule:
+      interval: daily
+  - package-ecosystem: github-actions
+    directory: /polaris-sast/
+    schedule:
+      interval: daily
+  - package-ecosystem: github-actions
+    directory: /upload-docs/
+    schedule:
+      interval: daily
