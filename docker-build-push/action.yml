@@ -22,6 +22,9 @@ inputs:
   target:
     description: "Sets the target stage to build"
     required: false
+  file:
+    description: "Path to the Dockerfile to use"
+    required: false
 
 runs:
   using: "composite"
@@ -40,9 +43,10 @@ runs:
       run: gcloud auth configure-docker
 
     - name: Tag and publish
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: ${{ inputs.context }}
         push: true
         tags: ${{ inputs.tags }}
         target: ${{ inputs.target }}
+        file: ${{ inputs.file }}
