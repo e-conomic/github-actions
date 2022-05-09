@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  auto_merge:
+  auto-merge:
     name: Auto merge
     runs-on: ubuntu-latest
     timeout-minutes: 1
@@ -17,4 +17,5 @@ jobs:
       - uses: e-conomic/mergebot@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: ${{ secrets.PLATFORM_REVIEWERS }}
           semver_match: minor
