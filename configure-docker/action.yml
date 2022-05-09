@@ -19,7 +19,7 @@ runs:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
     # Login to GCR: https://github.com/marketplace/actions/authenticate-to-google-cloud
     - name: "Authenticate to Google Cloud"
