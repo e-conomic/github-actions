@@ -13,7 +13,7 @@ Reference required steps in your workflow `yml` files.
 
 Check the latest version in the [releases](https://github.com/e-conomic/github-actions/releases) and suffix the actions with it.
 
-The current documentation assumes that the latest version is `v7`
+The current documentation assumes that the latest version is `v8`
 
 # Actions
 * `docker-build-push`
@@ -45,7 +45,7 @@ permissions:
 ### Step:
 ```yaml
 - name: Docker build and push
-  uses: e-conomic/github-actions/docker-build-push@v7
+  uses: e-conomic/github-actions/docker-build-push@v8
   with:
     tags: eu.gcr.io/dev-econo-cm/<service-name-and-version>
     workload_identity_pool_provider: <workload-identity-pool-provider>
@@ -79,7 +79,7 @@ permissions:
 ### Step:
 ```yaml
 - name: Configure and authenticate Docker
-  uses: e-conomic/github-actions/configure-docker@v7
+  uses: e-conomic/github-actions/configure-docker@v8
   with:
     workload_identity_pool_provider: <workload-identity-pool-provider>
     gcr_service_account_email: <google-service-account-email>
@@ -108,7 +108,7 @@ permissions:
 ### Step:
 ```yaml
 - name: Configure and authenticate Helm
-  uses: e-conomic/github-actions/configure-helm@v7
+  uses: e-conomic/github-actions/configure-helm@v8
   # Needed since installing twice yields error
   continue-on-error: true
   with:
@@ -128,7 +128,7 @@ permissions:
 Run Polaris static application security testing. The action runs on the root folder of the cloned application repository.
 ```yaml
 - name: Static application security testing
-  uses: e-conomic/github-actions/polaris-sast@v7
+  uses: e-conomic/github-actions/polaris-sast@v8
   with:
     api_url: ${{ secrets.POLARIS_API_URL }}
     access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
@@ -140,7 +140,7 @@ _None_
 Upload documentation to docs.e-conomic.ws
 ```yaml
 - name: Upload docs
-  uses: e-conomic/github-actions/upload-docs@v7
+  uses: e-conomic/github-actions/upload-docs@v8
   with:
     docs_bucket_sa: ${{ secrets.DOCS_BUCKET_SA }}
 ```
@@ -167,7 +167,7 @@ You will need to extract the version number from the release and then publish:
   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
   
 - name: Publish NPM package
-  uses: e-conomic/github-actions/npm-publish@v7
+  uses: e-conomic/github-actions/npm-publish@v8
   with:
     node-version: '16'
     package-version: ${{ steps.package_version.outputs.VERSION  }}
