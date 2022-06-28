@@ -38,3 +38,8 @@ runs:
 
         echo "Uploading docs to Google Cloud Storage for ${{ github.event.repository.name }}"
         gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${{ github.event.repository.name }}
+        
+        echo "Listing prod-econo-cm_docs root directory"
+        gsutil ls gs://prod-econo-cm_docs/
+        echo "Listing prod-econo-cm_docs repo directory"
+        gsutil ls gs://prod-econo-cm_docs/${{ github.event.repository.name }}
