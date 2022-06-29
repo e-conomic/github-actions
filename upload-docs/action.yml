@@ -9,14 +9,40 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check changed markdown files
+      shell: bash
+      run: |
+        echo "Listing changed MD files"
+        set +e
+        git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -i .md$
+        change_md_filed_count=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -i ".md$" | wc -l)
+        set -e
+        if [ "$change_md_filed_count" -gt 0 ]; then
+          has_md_files=true
+          echo "Found changed .md files. Will proceed with docs upload."
+        else
+          has_md_files=false
+          echo "No changed .md files found. Docs upload will not proceed."
+        fi
+        echo "HAS_MD_FILES: $HAS_MD_FILES"
+        echo "HAS_MD_FILES=$(echo $has_md_files)" >> $GITHUB_ENV
+
     - name: Setup gcloud credentials
+      if: ${{ env.HAS_MD_FILES == 'true' }}
       uses: google-github-actions/setup-gcloud@v0.6.0
       with:
         project_id: prod-econo-cm
         service_account_key: ${{ inputs.docs_bucket_sa }}
         export_default_credentials: true
 
-    - name: Upload docs
+    - uses: actions/checkout@v3
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      with:
+        repository: e-conomic/github-actions
+        path: _github-actions
+
+    - name: Prepare docs
+      if: ${{ env.HAS_MD_FILES == 'true' }}
       shell: bash
       run: |
         mkdir -p ./_docs-prepare
@@ -27,12 +53,41 @@ runs:
         if [[ -d ./docs ]]
         then
             echo "'docs' directory exists, prepearing for upload"
-            cp -R ./docs ./_docs-prepare/
+            cp -vR ./docs/** ./_docs-prepare/
         fi
 
         echo "Listing docs prepared directory structure"
         ls -alR ./_docs-prepare
 
+    - uses: actions/setup-node@v3
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      with:
+        node-version: lts/*
+
+    - name: Prepare docs for validation
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      shell: bash
+      run: |
+        cp -vR ./_docs-prepare/** ./_github-actions/upload-docs/docusaurus/docs/
+
+    - name: Install packages
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      shell: bash
+      working-directory: ./_github-actions/upload-docs/docusaurus
+      run: |
+        npm ci
+
+    - name: Build docs
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      shell: bash
+      working-directory: ./_github-actions/upload-docs/docusaurus
+      run: |
+        npm run build
+
+    - name: Upload docs
+      if: ${{ env.HAS_MD_FILES == 'true' }}
+      shell: bash
+      run: |
         echo "Removing existing docs for ${{ github.event.repository.name }}"
         gsutil -m rm -r gs://prod-econo-cm_docs/${{ github.event.repository.name }} 2>&1 || true
 
