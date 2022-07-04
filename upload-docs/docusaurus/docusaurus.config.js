@@ -3,7 +3,7 @@ module.exports = {
   tagline: 'Documentation validation',
   url: 'https://docs-test.private.e-conomic.ws',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   organizationName: 'e-conomic',
   projectName: 'documentation validation',
   presets: [
