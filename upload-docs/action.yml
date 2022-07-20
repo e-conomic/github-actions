@@ -65,6 +65,6 @@ runs:
       shell: bash
       run: gsutil -m rm -r gs://prod-econo-cm_docs/${{ steps.folder.outputs.name }} 2>&1 || true
 
-    - name: Upload docs ${{ steps.folder.outputs.name }}
+    - name: Upload docs
       shell: bash
       run: gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${{ steps.folder.outputs.name }}
