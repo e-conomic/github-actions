@@ -44,31 +44,27 @@ runs:
 
     - name: Prepare docs for validation
       shell: bash
-      run: |
-        cp -vR ./_docs-prepare/** ./_github-actions/upload-docs/docusaurus/docs/
+      run: cp -vR ./_docs-prepare/** ./_github-actions/upload-docs/docusaurus/docs/
 
-# - name: Install packages
-#   shell: bash
-#   working-directory: ./_github-actions/upload-docs/docusaurus
-#   run: |
-#     npm ci
-
-# - name: Build docs
-#   shell: bash
-#   working-directory: ./_github-actions/upload-docs/docusaurus
-#   run: |
-#     npm run build
-
-    - name: Get helper names into env variables
+    - name: Install packages
       shell: bash
-      id: service_name
-      run: echo ::set-output name=service_name::${GITHUB_REPOSITORY##*/}
+      working-directory: ./_github-actions/upload-docs/docusaurus
+      run: npm ci
 
-    - name: Upload docs
+    - name: Build docs
       shell: bash
-      run: |
-        echo "Removing existing docs for ${{ steps.service_name.outputs.service_name }}"
-        gsutil -m rm -r gs://prod-econo-cm_docs/${{ steps.service_name.outputs.service_name }} 2>&1 || true
+      working-directory: ./_github-actions/upload-docs/docusaurus
+      run: npm run build
 
-        echo "Uploading docs to Google Cloud Storage for ${{ steps.service_name.outputs.service_name }}"
-        gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${{ steps.service_name.outputs.service_name }}
+    - name: Set folder name
+      shell: bash
+      id: folder
+      run: echo ::set-output name=name::${GITHUB_REPOSITORY##*/}
+
+    - name: Remove existing docs
+      shell: bash
+      run: gsutil -m rm -r gs://prod-econo-cm_docs/${{ steps.folder.outputs.name }} 2>&1 || true
+
+    - name: Upload docs ${{ steps.folder.outputs.name }}
+      shell: bash
+      run: gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${{ steps.folder.outputs.name }}
