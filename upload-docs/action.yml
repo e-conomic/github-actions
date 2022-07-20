@@ -62,8 +62,8 @@ runs:
     - name: Upload docs
       shell: bash
       run: |
-        echo "Removing existing docs for ${{ github.event.repository.name }}"
-        gsutil -m rm -r gs://prod-econo-cm_docs/${{ github.event.repository.name }} 2>&1 || true
+        echo "Removing existing docs for ${GITHUB_REPOSITORY##*/}"
+        gsutil -m rm -r gs://prod-econo-cm_docs/${GITHUB_REPOSITORY##*/} 2>&1 || true
 
-        echo "Uploading docs to Google Cloud Storage for ${{ github.event.repository.name }}"
-        gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${{ github.event.repository.name }}
+        echo "Uploading docs to Google Cloud Storage for ${GITHUB_REPOSITORY##*/}"
+        gsutil -m cp -r ./_docs-prepare gs://prod-econo-cm_docs/${GITHUB_REPOSITORY##*/}
