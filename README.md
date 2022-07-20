@@ -182,6 +182,4 @@ If you want to add a new shareable action, please create a pull request containi
 * Update of the readme.md reflecting your changes if necessary
 
 ⚠️Important ⚠️
-Once the changes are merged into the `master` branch:
-* If you have breaking changes, you need to release a new `vX` version
-* If you do not have breaking changes, you need to update the latest `vX` version (move the tag to latest commit) and release the `vX.Y` minor version as well
+Once the changes are merged into the `master` branch you need to update the latest `vX` version (move the tag to latest commit)
